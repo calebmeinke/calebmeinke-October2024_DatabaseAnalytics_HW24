@@ -1,0 +1,82 @@
+  #features .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #features .col-md-4 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #features .card {
+    flex: 1;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  select,
+  input[type="number"] {
+    width: 100%;
+  }
+
+  label.form-label {
+    color: #fdf6e3;
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  input[type="number"],
+  select.form-select {
+    background-color: #fdf6e3;
+    color: #002b36;
+}
+
+  .card-header {
+    background-color: transparent;
+    color: #fdf6e3;
+    font-weight: bold;
+    border-bottom: 1px solid #fdf6e3;
+    text-align: center;
+  }
+  .background-section {
+    background: linear-gradient(to right, rgba(0,43,54,0.75), rgba(0,43,54,0.25)),
+                url("/static/images/cleanup.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fdf6e3;
+    border-radius: 10px;
+  }
+  
+  .background-section .list-group-item {
+    background-color: rgba(0, 43, 54, 0.65);
+    color: #fdf6e3;
+    border: none;
+  }
+  
+  .background-section a {
+    color: #b58900;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #002b36;
+  }
+  
+  .background-section a:hover {
+    color: #e3c880;
+  }
+
+ /* #alien {
+    position: relative;
+    top: 0px;
+    animation-name: fly;
+    animation-duration:  5s;
+  }
+
+  @keyframes fly {
+      0%   { top:0px;left: 0px;}
+      100% { top:0px;left: 250px;}
+    } */ 
+    
+
+  

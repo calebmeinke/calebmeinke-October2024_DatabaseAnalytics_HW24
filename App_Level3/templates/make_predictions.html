@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Exploration - Global Food Waste Analysis App</title>
+
+  <!-- Bootstrap/Bootswatch Solar Theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar-brand img {
+      height: 60px;
+      width: auto;
+    }
+
+    .divider-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      gap: 0.75rem;
+    }
+
+    .divider-wave {
+      flex-grow: 1;
+      height: 15px;
+    }
+
+    .divider-wave svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .globe-icon {
+      height: 30px;
+      width: auto;
+      max-width: 100%;
+      display: inline-block;
+    }
+
+    .predictor-background {
+    background: linear-gradient(to right, rgba(0, 43, 54, 0.8), rgba(0, 43, 54, 0.1)),
+              url("{{ url_for('static', filename='images/ml.png') }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 2rem;
+    min-height: 400px;
+    color: #fdf6e3;
+    border-radius: 10px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid d-flex justify-content-center align-items-center">
+      <div class="d-flex align-items-center gap-4">
+        <a class="navbar-brand p-0 m-0" href="/">
+          <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Trash Logo" />
+        </a>
+        <div class="collapse navbar-collapse show" id="navbarColor01">
+          <ul class="navbar-nav d-flex flex-row gap-4 align-items-center m-0">
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/tableau1' %}active{% endif %}" href="/tableau1">Global Food Waste</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/tableau2' %}active{% endif %}" href="/tableau2">Food Waste and Hunger</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/make_predictions' %}active{% endif %}" href="/make_predictions">Interactive Exploration</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/technical_analysis' %}active{% endif %}" href="/technical_analysis">Technical Analysis</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/report' %}active{% endif %}" href="/report">Food Waste Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/about_us' %}active{% endif %}" href="/about_us">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/works_cited' %}active{% endif %}" href="/works_cited">Works Cited</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Globe Divider -->
+  <div class="divider-wrapper">
+    <div class="divider-wave">
+      <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+        <path d="M0 10 Q 25 0 50 10 T 100 10" fill="none" stroke="#b58900" stroke-width="2" />
+      </svg>
+    </div>
+    <img src="{{ url_for('static', filename='images/Globe.png') }}" alt="Globe Divider" class="globe-icon" />
+    <div class="divider-wave">
+      <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+        <path d="M0 10 Q 25 0 50 10 T 100 10" fill="none" stroke="#b58900" stroke-width="2" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-dark text-white text-center py-1">
+    <div class="container">
+      <br>
+      <h1>Food Waste Prediction Tool</h1>
+      <br>
+      <p>Use the below inputs to generate the estimated tonnage of food waste by country for a given year!</p>
+      <p>What do you estimate is the total tonnage of food loss in the United States during 2022?</p>
+    </div>
+  </header>
+
+  <!--Predictor App-->
+  <div class="predictor-background py-5">
+    <div class="container d-flex justify-content-center align-items-start">
+      <div class="card border-primary p-4 w-100" style="max-width: 600px; background-color: rgba(7, 54, 66, 0.7); border-radius: 10px;">
+        <div class="card-header text-center">Food Waste Prediction Tool</div>
+        <div class="card-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="country" class="form-label">Country</label>
+                <select id="country" class="form-select">
+                  <option value="Argentina">Argentina</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Brazil">Brazil</option>
+                  <option value="Canada">Canada</option>
+                  <option value="China">China</option>
+                  <option value="France">France</option>
+                  <option value="Germany">Germany</option>
+                  <option value="India">India</option>
+                  <option value="Indonesia">Indonesia</option>
+                  <option value="Italy">Italy</option>
+                  <option value="Japan">Japan</option>
+                  <option value="Mexico">Mexico</option>
+                  <option value="Russia">Russia</option>
+                  <option value="Saudi Arabia">Saudi Arabia</option>
+                  <option value="South Africa">South Africa</option>
+                  <option value="South Korea">South Korea</option>
+                  <option value="Spain">Spain</option>
+                  <option value="Turkey">Turkey</option>
+                  <option value="UK">UK</option>
+                  <option value="USA">USA</option>
+                </select>
+
+                <label for="year" class="form-label mt-3">Year</label>
+                <select id="year" class="form-select">
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                </select>
+
+                <label for="food_category" class="form-label mt-3">Food Category</label>
+                <select id="food_category" class="form-select">
+                  <option value="Bakery Items">Bakery Items</option>
+                  <option value="Beverages">Beverages</option>
+                  <option value="Dairy Products">Dairy Products</option>
+                  <option value="Frozen Food">Frozen Food</option>
+                  <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                  <option value="Grains & Cereals">Grains & Cereals</option>
+                  <option value="Meat & Seafood">Meat & Seafood</option>
+                  <option value="Prepared Food">Prepared Food</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="economic_loss" class="form-label">Economic Loss (Million $)</label>
+                <input type="number" class="form-control" id="economic_loss" value="2000">
+                <label for="population" class="form-label mt-3">Population (Millions)</label>
+                <input type="number" class="form-control" id="population" value="2500">
+                <label for="avg_waste" class="form-label mt-3">Average Waste Per Capita (kg)</label>
+                <input type="number" class="form-control" id="avg_waste" value="2000">
+                <label for="household_waste" class="form-label mt-3">Household Waste (%)</label>
+                <input type="number" class="form-control" id="household_waste" value="2000">
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="button" class="btn btn-warning px-4" id="filter">Make Prediction</button>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col text-center">
+                <div id="prediction-result" class="alert alert-info" role="alert" style="display: none;"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/logic.js') }}"></script>
+</body>
+
+</html>
